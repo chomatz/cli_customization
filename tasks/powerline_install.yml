@@ -35,32 +35,33 @@
         mode: "0644"
 
     - name: initialize vimrc generator
-      ansible.builtin.template:
-        src: vimrc_generator.sh.j2
-        dest: /etc/profile.d/vimrc_generator.sh
-        owner: root
-        group: root
-        mode: "0644"
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: vimrc_template.yml
 
     - name: add powerline variable(s) to vimrc generator
-      ansible.builtin.blockinfile:
-        path: /etc/profile.d/vimrc_generator.sh
-        insertafter: "### variables ###"
-        marker: "### {mark} powerline configuration ###"
-        block: |
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: vimrc_injector.yml
+      vars:
+        vimrc_label: powerline
+        vimrc_type: variable
+        vimrc_content: |
           config_powerline=(
             "set laststatus=2"
             "set showtabline=2"
             "set noshowmode"
             "set t_Co=256"
           )
- 
+
     - name: add powerline script(s) to vimrc generator
-      ansible.builtin.blockinfile:
-        path: /etc/profile.d/vimrc_generator.sh
-        insertafter: "### scripts ###"
-        marker: "### {mark} powerline settings ###"
-        block: |
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: vimrc_injector.yml
+      vars:
+        vimrc_label: powerline
+        vimrc_type: script
+        vimrc_content: |
           for configuration in ${config_powerline[*]}; do
             grep -qxF "$configuration" "$out_file" || echo "$configuration" >> "$out_file"
           done
