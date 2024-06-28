@@ -1,0 +1,12 @@
+---
+
+  powerline_packages_arch:
+    - powerline-vim
+  powerline_packages_base:
+    - powerline
+    - powerline-fonts
+  powerline_packages_redhat:
+    - tmux-powerline
+    - vim-powerline
+
+...
