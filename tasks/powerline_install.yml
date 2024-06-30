@@ -46,13 +46,7 @@
       vars:
         vimrc_label: powerline
         vimrc_type: variable
-        vimrc_content: |
-          config_powerline=(
-            "set laststatus=2"
-            "set showtabline=2"
-            "set noshowmode"
-            "set t_Co=256"
-          )
+        vimrc_content: "{{ powerline_vimrc_variables }}"
 
     - name: add powerline script(s) to vimrc generator
       ansible.builtin.include_role:
@@ -61,10 +55,7 @@
       vars:
         vimrc_label: powerline
         vimrc_type: script
-        vimrc_content: |
-          for configuration in ${config_powerline[*]}; do
-            grep -qxF "$configuration" "$out_file" || echo "$configuration" >> "$out_file"
-          done
+        vimrc_content: "{{ powerline_vimrc_scripts }}"
 
   when: ansible_distribution == "Fedora"
 
