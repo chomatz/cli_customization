@@ -65,6 +65,18 @@
         vimrc_type: script
         vimrc_content: "{{ powerline_vimrc_scripts }}"
 
+    - name: disable steamdeck prompt
+      ansible.builtin.replace:
+        path: "{{ item }}"
+        regexp: '^PROMPT_COMMAND='
+        replace: '#PROMPT_COMMAND='
+      loop:
+        - /etc/bash.bashrc
+        - /home/deck/.bashrc
+      when:
+        - ansible_distribution == "Archlinux"
+        - ansible_distribution_release == "holo"
+
   when: >
     (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
     ansible_distribution == "Fedora"
