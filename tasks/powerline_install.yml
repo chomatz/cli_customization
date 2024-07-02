@@ -5,7 +5,15 @@
 
     - name: install powerline
       ansible.builtin.package:
+        name: "{{ powerline_packages_base | ansible.builtin.union(powerline_packages_arch) }}"
+      when:
+        - ansible_distribution == "Archlinux"
+        - ansible_distribution_release == "holo"
+
+    - name: install powerline
+      ansible.builtin.package:
         name: "{{ powerline_packages_base | ansible.builtin.union(powerline_packages_redhat) }}"
+      when: ansible_distribution == "Fedora"
 
     - name: locate powerline-bash script
       ansible.builtin.shell:
@@ -57,6 +65,8 @@
         vimrc_type: script
         vimrc_content: "{{ powerline_vimrc_scripts }}"
 
-  when: ansible_distribution == "Fedora"
+  when: >
+    (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
+    ansible_distribution == "Fedora"
 
 ...
