@@ -2,6 +2,9 @@
 ansible role for customizing the command line interface
 
 ## requirements
+requires the following role(s):
+- [text_editor](https://github.com/chomatz/text_editor)
+
 
 ## variables
 
