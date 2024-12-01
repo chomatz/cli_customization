@@ -10,4 +10,7 @@ if [ ! -f "$out_file" ]; then
 	echo "bind-key -T copy-mode-vi End send-keys -X end-of-line" >> "$out_file"
 	echo "bind-key -T copy-mode-vi NPage send-keys -X page-down" >> "$out_file"
 	echo "bind-key -T copy-mode-vi PPage send-keys -X page-up" >> "$out_file"
+	echo "set -g base-index 1" >> "$out_file"
+	echo "set -g renumber-windows on" >> "$out_file"
+	echo "set -g status-position top" >> "$out_file"
 fi
