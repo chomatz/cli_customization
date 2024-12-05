@@ -10,7 +10,7 @@
 
     - name: upload nvim generator script
       ansible.builtin.template:
-        src: templates/nvim_config_generator.sh.j2
+        src: templates/neovim_config_generator.sh.j2
         dest: "{{ nvim_config_generator }}"
         force: true
         owner: root
