@@ -1,7 +1,11 @@
-if [ -f ~/.customize_text_editor ]; then
+trigger_file="~/.customize_text_editor"
+if [ -f "$trigger_file" ]; then
 
 #nvim_path
 
 #nvim_file
+
+
+rm -f "$trigger_file"
 
 fi
