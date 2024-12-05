@@ -1,0 +1,57 @@
+---
+
+- name: ensure tasks run only on selected os releases
+  block:
+
+    - name: install neovim
+      ansible.builtin.package:
+        name: neovim
+        state: present
+
+    - name: upload nvim generator script
+      ansible.builtin.template:
+        src: templates/nvim_config_generator.sh.j2
+        dest: "{{ nvim_config_generator }}"
+        force: true
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: define nvim configuration path
+      ansible.builtin.set_fact:
+        nvim_config_path: "mkdir -p {{ nvim_config_location | join(' ') }}"
+        
+    - name: display nvim configuration path
+      ansible.builtin.debug:
+        var: nvim_config_path
+        verbosity: 1
+
+    - name: nvim generator script - append configuration directory
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: text_injector.yml
+      vars:
+        text_file: "{{ nvim_config_generator }}"
+        text_label: "nvim_config"
+        text_tag: "#nvim_path"
+        text_content: "{{ nvim_config_path }}"
+
+    - name: nvim generator script - append configuration file
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: text_injector.yml
+      vars:
+        text_file: "{{ nvim_config_generator }}"
+        text_label: "{{ item.name }}"
+        text_tag: "#nvim_file"
+        text_content: |
+          cat <<EOF > {{ item.name }}
+          {{ item.data }}
+          EOF
+      loop: "{{ nvim_config_file }}"
+
+  when: >
+    (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
+    ansible_distribution == "Fedora"
+
+...
