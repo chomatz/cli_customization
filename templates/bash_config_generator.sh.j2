@@ -1,0 +1,13 @@
+trigger_file="$HOME/.customize_shell"
+
+if [ -f "$trigger_file" ]; then
+
+# cleanup ~/.bashrc
+sed -i '1,/#-----autodelete_lines_below-----#/!d' ~/.bashrc 
+sed -in '/#-----autodelete_lines_below-----#/q;p' ~/.bashrc
+
+#bash_config
+
+rm -f "$trigger_file"
+
+fi
