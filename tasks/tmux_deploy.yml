@@ -1,0 +1,37 @@
+---
+
+- name: ensure tasks run only on selected os releases
+  block:
+
+    - name: install tmux
+      ansible.builtin.package:
+        name: tmux
+        state: present
+
+    - name: upload tmux generator script
+      ansible.builtin.template:
+        src: templates/tmux_config_generator.sh.j2
+        dest: "{{ tmux_config_generator }}"
+        force: true
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: tmux generator script - append custom configuration
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: text_injector.yml
+      vars:
+        text_file: "{{ tmux_config_generator }}"
+        text_label: "tmux_custom"
+        text_tag: "#tmux_config"
+        text_content: |
+          cat <<EOF > ~/.tmux.conf
+          {{ tmux_custom_config }}
+          EOF
+
+  when: >
+    (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
+    ansible_distribution == "Fedora"
+
+...
