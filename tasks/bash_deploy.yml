@@ -1,0 +1,37 @@
+---
+
+- name: ensure tasks run only on selected os releases
+  block:
+
+    - name: install bash
+      ansible.builtin.package:
+        name: bash
+        state: present
+
+    - name: upload bash generator script
+      ansible.builtin.template:
+        src: templates/bash_config_generator.sh.j2
+        dest: "{{ bash_config_generator }}"
+        force: true
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: bash generator script - append custom configuration
+      ansible.builtin.include_role:
+        name: text_editor
+        tasks_from: text_injector.yml
+      vars:
+        text_file: "{{ bash_config_generator }}"
+        text_label: "bash_custom"
+        text_tag: "#bash_config"
+        text_content: |
+          cat <<EOF >> ~/.bashrc
+          {{ bash_custom_config }}
+          EOF
+
+  when: >
+    (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
+    ansible_distribution == "Fedora"
+
+...
