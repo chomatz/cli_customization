@@ -1,0 +1,21 @@
+---
+
+- name: create font directory
+  ansible.builtin.file:
+    path: "/usr/local/share/fonts/{{ font_name }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: install nerd font
+  ansible.builtin.unarchive:
+    src: "{{ font_url }}"
+    dest: "/usr/local/share/fonts/{{ font_name }}"
+    include: "*ttf"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+
+...
