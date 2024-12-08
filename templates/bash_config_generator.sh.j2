@@ -4,7 +4,7 @@ if [ -f "$trigger_file" ]; then
 
 # cleanup ~/.bashrc
 sed -i '1,/#-----autodelete_lines_below-----#/!d' ~/.bashrc 
-sed -in '/#-----autodelete_lines_below-----#/q;p' ~/.bashrc
+sed -i -n '/#-----autodelete_lines_below-----#/q;p' ~/.bashrc
 
 #bash_config
 
