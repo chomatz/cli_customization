@@ -17,5 +17,7 @@
     group: root
     mode: "0644"
     remote_src: true
+  retries: 10
+  delay: 3
 
 ...
