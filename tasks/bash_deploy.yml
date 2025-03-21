@@ -30,6 +30,15 @@
           {{ bash_custom_config }}
           EOF
 
+    - name: disable steamdeck default prompt
+      ansible.builtin.replace:
+        path: /etc/bash.bashrc
+        regexp: '^PROMPT_COMMAND='
+        replace: '#PROMPT_COMMAND='
+      when:
+        - ansible_distribution == "Archlinux"
+        - ansible_distribution_release == "holo"
+
   when: >
     (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
     ansible_distribution == "Fedora"
