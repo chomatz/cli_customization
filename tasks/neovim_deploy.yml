@@ -49,6 +49,8 @@
           {{ item.data }}
           EOF
       loop: "{{ nvim_config_file }}"
+      loop_control:
+        label: "{{ item.name }}"
 
   when: >
     (ansible_distribution == "Archlinux" and ansible_distribution_release == "holo") or
