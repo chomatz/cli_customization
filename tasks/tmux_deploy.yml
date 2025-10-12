@@ -7,6 +7,7 @@
       ansible.builtin.package:
         name: tmux
         state: present
+      when: ansible_distribution != "Bazzite"
 
     - name: upload tmux generator script
       ansible.builtin.template:
