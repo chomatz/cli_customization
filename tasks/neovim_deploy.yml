@@ -3,11 +3,19 @@
 - name: ensure tasks run only on selected os releases
   block:
 
-    - name: install neovim
+    - name: install neovim via package manager
       ansible.builtin.package:
         name: neovim
         state: present
       when: ansible_distribution != "Bazzite"
+
+    - name: install neovim via homebrew
+      community.general.homebrew:
+        name: neovim
+        state: present
+      when: ansible_distribution == "Bazzite"
+      vars:
+        ansible_become: false
 
     - name: upload nvim generator script
       ansible.builtin.template:
