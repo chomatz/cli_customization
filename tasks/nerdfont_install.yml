@@ -17,5 +17,9 @@
     group: root
     mode: "0644"
     remote_src: true
+  register: nerd_font_install
+  until: nerd_font_install is not failed
+  retries: 10
+  delay: 10
 
 ...
